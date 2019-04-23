@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {HashRouter as Router, Route, Link} from 'react-router-dom'
 import axios from 'axios'
 
 import Pager from './Pager'
@@ -10,6 +9,7 @@ class Users extends Component{
         this.state = {
             users: [],
             count: 0,
+            name: ''
         }
         this.load()
     }
@@ -21,39 +21,35 @@ class Users extends Component{
     }
 
     load = () =>{
-        console.log('this.props.match', this.props.match)
+        // console.log('this.props.match in Users', this.props.match)
         axios.get(`https://acme-users-api.herokuapp.com/api/users/${this.props.match.params.idx || ''}`)
             .then(resp=>resp.data)
             .then(({users, count})=>this.setState({users, count}))
     }
 
+    onSave = (ev) =>{
+        ev.preventDefault();
+    }
+
+    onChange = (ev) =>{
+        this.setState({[ev.target.name]: ev.target.value})
+    }
+
+    navigate = (name) =>{
+        this.props.history.push(`/users/search/${name}`)
+    }
+
     render(){
-        const {users, count} =  this.state
-        // const current = this.props.match.params.idx ? this.props.match.params.idx*1 : 0;
-        // const pageCount = Math.floor(count/50);
-        // const last = current === pageCount;
-        // const first = current === 0;
+        const {users, count, name} =  this.state
+        const {onSave, onChange, navigate} = this
         return(
             <div>
-                {/* <div>
-                You are viewing page { current + 1 } out of { pageCount + 1 }
-                </div>
-                <div className='btn-group'>
-                    <Link className={`btn btn-primary${first ? ' disabled': ''}`} to='/Users'>First</Link>
-                    <Link className={`btn btn-primary${first ? ' disabled': ''}`}  to={`/Users/${current - 1}`}>Prev</Link>
-                    <Link className={`btn btn-primary`}  to={`/Users/${current}`}>{current}</Link>
-                    <Link className={`btn btn-primary${last ? ' disabled': ''}`} to={`/Users/${current + 1 }`}>Next</Link>
-                    <Link className={`btn btn-primary${last ? ' disabled': ''}`}  to={`/Users/${pageCount}`}>Last</Link>
-                </div> */}
-                {/* <Router>
-                    <Route path='/Users' render={({match, count})=>(
-                        <Pager 
-                            match={match}
-                            count={count}
-                            />
-                    )}/>
-                </Router> */}
                 <Pager match={this.props.match} count={count}/>
+                <form onSubmit={onSave}>
+                    <input className='form-control' placeholder='Search Results' name='name' value={name} onChange={onChange}/>
+                    <button className='btn btn-primary' type='submit' onClick={()=>navigate(name)}>{ 'Go' }</button>   
+                    <button className='btn btn-primary' type='submit'>{ 'Clear' }</button>
+                </form>
                 <table className='table'>
                     <thead>
                         <tr>

@@ -3,8 +3,8 @@ import {Link} from 'react-router-dom'
 
 const Nav = ({location: {pathname}}) =>{
     const links = [
-        {label: 'Home', to: '/Home'},
-        {label: 'Users', to: '/Users'}
+        {label: 'Home', to: '/home'},
+        {label: 'Users', to: '/users'}
     ]
 
     return (
