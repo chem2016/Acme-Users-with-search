@@ -50,7 +50,7 @@ class Search extends Component{
     toMatch = (originalStr, matchStr) => {
         const re = new RegExp(matchStr,"gi");
         const found = originalStr.match(re);
-        const unmatchArr = originalStr.split(matchStr);
+        const unmatchArr = originalStr.split(re);
         let newArr = [];
         for(let i=0; i<unmatchArr.length; i++){
             if(i !== unmatchArr.length - 1){
@@ -60,7 +60,6 @@ class Search extends Component{
                 newArr.push(unmatchArr[i])
             }
           }
-        console.log(newArr)
         return newArr
     }
 
